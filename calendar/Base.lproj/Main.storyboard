@@ -18,8 +18,12 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PSc-Do-4ga">
-                                <rect key="frame" x="20" y="84" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                                <rect key="frame" x="32" y="81" width="30" height="36"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <state key="normal" title="&lt;"/>
+                                <connections>
+                                    <action selector="clickToBackwardBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Bw1-Dm-nAV"/>
+                                </connections>
                             </button>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0Zt-o5-K7k">
                                 <rect key="frame" x="137" y="74" width="140" height="50"/>
@@ -30,6 +34,9 @@
                                             <constraint firstAttribute="width" constant="69" id="xZf-Pc-0tZ"/>
                                         </constraints>
                                         <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="clickToYearBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EUr-JO-jfv"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="." textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uae-4b-jX7">
                                         <rect key="frame" x="69" y="0.0" width="5" height="50"/>
@@ -40,6 +47,9 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eT1-he-WNe">
                                         <rect key="frame" x="74" y="0.0" width="66" height="50"/>
                                         <state key="normal" title="Button"/>
+                                        <connections>
+                                            <action selector="clickToMonthBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0aN-kh-BAz"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -59,17 +69,17 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qKl-ob-4jW">
-                                <rect key="frame" x="348" y="84" width="46" height="30"/>
-                                <state key="normal" title="Button"/>
+                                <rect key="frame" x="352" y="81" width="30" height="36"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="20"/>
+                                <state key="normal" title="&gt;"/>
+                                <connections>
+                                    <action selector="clickToForwardBtn:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0yl-zp-Nta"/>
+                                </connections>
                             </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="yTK-wF-xM2">
-                                <rect key="frame" x="32" y="165" width="350" height="400"/>
+                                <rect key="frame" x="32" y="165" width="350" height="597"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="350" id="D3e-Cu-sqo"/>
-                                    <constraint firstAttribute="height" constant="400" id="oWu-Fu-Qfi"/>
-                                </constraints>
-                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DqV-I0-AIZ">
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="0.0" minimumInteritemSpacing="0.0" id="DqV-I0-AIZ">
                                     <size key="itemSize" width="20" height="20"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
@@ -82,9 +92,22 @@
                                         <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="8jL-BO-165">
                                             <rect key="frame" x="0.0" y="0.0" width="20" height="20"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1A0-X5-l5b">
+                                                    <rect key="frame" x="-11" y="-0.5" width="42" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="1A0-X5-l5b" firstAttribute="centerX" secondItem="8jL-BO-165" secondAttribute="centerX" id="Bwd-8o-gmN"/>
+                                                <constraint firstItem="1A0-X5-l5b" firstAttribute="centerY" secondItem="8jL-BO-165" secondAttribute="centerY" id="gLu-hV-0ef"/>
+                                            </constraints>
                                         </collectionViewCellContentView>
-                                        <size key="customSize" width="20" height="20"/>
+                                        <connections>
+                                            <outlet property="dayLabel" destination="1A0-X5-l5b" id="0O3-Ex-hX7"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -101,20 +124,22 @@
                             <constraint firstItem="0Zt-o5-K7k" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="30" id="9Do-vp-cbp"/>
                             <constraint firstItem="qKl-ob-4jW" firstAttribute="centerY" secondItem="0Zt-o5-K7k" secondAttribute="centerY" id="Hnd-4D-9ca"/>
                             <constraint firstItem="qKl-ob-4jW" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="0Zt-o5-K7k" secondAttribute="trailing" constant="8" symbolic="YES" id="URb-6o-2vK"/>
-                            <constraint firstItem="PSc-Do-4ga" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="WhM-4K-BcL"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qKl-ob-4jW" secondAttribute="trailing" constant="20" id="XnJ-eR-Xhy"/>
-                            <constraint firstItem="yTK-wF-xM2" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="hgB-cr-tUG"/>
+                            <constraint firstItem="PSc-Do-4ga" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="WhM-4K-BcL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="qKl-ob-4jW" secondAttribute="trailing" constant="32" id="XnJ-eR-Xhy"/>
+                            <constraint firstItem="yTK-wF-xM2" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="32" id="amE-f7-JoL"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="yTK-wF-xM2" secondAttribute="trailing" constant="32" id="goX-cx-8fZ"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="yTK-wF-xM2" secondAttribute="bottom" constant="100" id="i0s-K3-dP1"/>
                             <constraint firstItem="0Zt-o5-K7k" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="PSc-Do-4ga" secondAttribute="trailing" constant="8" symbolic="YES" id="tEM-3V-lkZ"/>
                             <constraint firstItem="0Zt-o5-K7k" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="zEW-wS-b8X"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="clickToBackwardBtn" destination="PSc-Do-4ga" id="kyd-bN-2pM"/>
+                        <outlet property="clickToForwardBtn" destination="qKl-ob-4jW" id="Up3-EK-y4d"/>
+                        <outlet property="clickToMonthBtn" destination="eT1-he-WNe" id="4Hr-39-QHG"/>
+                        <outlet property="clickToYearBtn" destination="Feb-gu-w8F" id="lS3-c9-cUx"/>
                         <outlet property="dotLabel" destination="uae-4b-jX7" id="L19-vn-En5"/>
-                        <outlet property="nextMonthButton" destination="qKl-ob-4jW" id="scS-sd-H0x"/>
-                        <outlet property="preMonthButton" destination="PSc-Do-4ga" id="68v-l6-7vj"/>
                         <outlet property="selectDateFrameView" destination="0Zt-o5-K7k" id="1u7-fY-97i"/>
-                        <outlet property="selectMonthButton" destination="eT1-he-WNe" id="oA0-Lq-cui"/>
-                        <outlet property="selectYearButton" destination="Feb-gu-w8F" id="Jto-yn-Q86"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -125,9 +150,6 @@
     <resources>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

@@ -51,7 +51,7 @@ class CalendarModel : CalendarProtocol{
         
     
     func initCalendarInstance() {
-        
+        print("initCalendarInstance")
     }
     
     
