@@ -38,11 +38,10 @@ protocol CalendarProtocol {
 
 class CalendarModel : CalendarProtocol{
     
-    var calendarInstance : Calendar
-    
-    var currentYear : Int
-    var currentMonth : Int
-    var currentDay : Int
+//    var calendarInstance : Calendar
+    var currentYear : Int = 0
+    var currentMonth : Int = 0
+    var currentDay : Int = 0
     
     
     
@@ -58,39 +57,39 @@ class CalendarModel : CalendarProtocol{
     
     
     func isSaturDay(day : Int) -> Bool {
-        <#code#>
+        return true
     }
     
     func isSunDay(day : Int) -> Bool {
-        <#code#>
+        return true
     }
     
     func isToday(day : Int) -> Bool {
-        <#code#>
+        return true
     }
     
        
     func setYear(value: Int) {
-        <#code#>
+        
     }
     
     func setMonth(value: Int) {
-        <#code#>
+        
     }
     
     func setDay(value: Int) {
-        <#code#>
+        
     }
     
  
 
     
     func getYearList() -> Array<Int> {
-        
+        return []
     }
     
     func getMonthList() -> Array<Int> {
-        <#code#>
+        return []
     }
     
     func getDateCount(month: Int) -> Int {
