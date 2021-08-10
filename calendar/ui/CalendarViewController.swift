@@ -12,16 +12,15 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     @IBOutlet weak var clickToBackwardBtn: UIButton!
     @IBOutlet weak var clickToForwardBtn: UIButton!
-    @IBOutlet weak var selectDateFrameView: UIView!
     @IBOutlet weak var clickToYearBtn: UIButton!
-    @IBOutlet weak var clickToMonthBtn: UIButton!
-    @IBOutlet weak var dotLabel: UILabel!
-    var  dataModel = CalendarModel()
+    var  dataModel : CalendarModel
     var dayList = [0,0,0,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,0,0,0]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        self.initModel()
+        clickToYearBtn.setTitle(dataModel.setYearMonth(value: Date()), for: .normal)
     }
     
     /*
@@ -33,14 +32,19 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         // Pass the selected object to the new view controller.
     }
     */
+    private func initModel(){
+        self.dataModel = CalendarModel()
+    }
 
-    
+    private func initCollectionView(){
+        
+    }
 
-    func  setYearView(value:Int){
+    func  setYearView(value:String) {
         // Year에 대한 text set
     }
     
-    func  setMonthView(value:Int){
+    func  setMonthView(value:String){
         //month에 대한 text  set
     }
     

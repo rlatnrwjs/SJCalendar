@@ -20,9 +20,9 @@ protocol CalendarProtocol {
     // 최초 Calendar를 컨트롤 할 기본 값들을 초기화 하는 펑션
     func initCalendarInstance()
         
-    func setYear(value : Int)
+    func setYearMonth(value : Date) -> String
     
-    func setMonth(value : Int)
+//    func setMonth(value : Int)
     
     func setDay(value : Int)
     
@@ -68,14 +68,16 @@ class CalendarModel : CalendarProtocol{
         return true
     }
     
-       
-    func setYear(value: Int) {
-        
+    func setYearMonth(value: Date) -> String{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy . MM"
+        let dateString = formatter.string(from: value)
+        return dateString
     }
     
-    func setMonth(value: Int) {
-        
-    }
+//    func setMonth(value: Int) {
+//
+//    }
     
     func setDay(value: Int) {
         
