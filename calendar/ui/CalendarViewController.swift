@@ -7,15 +7,19 @@
 
 import UIKit
 
-class CalendarViewController: UIViewController {
+class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
 
-    var  dataModel : CalendarModel
     
+    @IBOutlet weak var clickToBackwardBtn: UIButton!
+    @IBOutlet weak var clickToForwardBtn: UIButton!
+    @IBOutlet weak var clickToYearBtn: UIButton!
+    var  dataModel = CalendarModel()
+    var dayList = [0,0,0,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,0,0,0]
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view.
+        clickToYearBtn.setTitle(dataModel.setYearMonth(value: Date()), for: .normal)
     }
     
     /*
@@ -27,51 +31,38 @@ class CalendarViewController: UIViewController {
         // Pass the selected object to the new view controller.
     }
     */
-    
-    
-    init() {
-        dataModel = CalendarModel()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // 해당 월 표시 및 버튼 생성
-    func headerLayout(){
-        
-    }
-    
-    func  setYearView(value:Int){
+
+
+
+    func  setYearView(value:String) {
         // Year에 대한 text set
     }
     
-    func  setMonthView(value:Int){
+    func  setMonthView(value:String){
         //month에 대한 text  set
     }
     
     
     // 이전달 버튼 클릭
     //재강 : 동일한 성격의 이벤트는 네이밍을 최대한 통일
-    func clickToBackwardBtn(){
-        
+    @IBAction func clickToBackwardBtn(_ sender: UIButton) {
     }
+    
     
     // 다음달 버튼 클릭
     //재강 : 동일한 성격의 이벤트는 네이밍을 최대한 통일
-    func clickToForwardBtn(){
-        
+    @IBAction func clickToForwardBtn(_ sender: UIButton) {
     }
  
     // 년도 선택시 클릭 이벤트
-    func clickToYearBtn(){
-        // getYearMonth(date: Date())
+    @IBAction func clickToYearBtn(_ sender: UIButton) {
     }
+
     
     // 월 선택시 클릭 이벤트
-    func clickToMonthBtn(){
-        // getYearMonth(date: Date())
+    @IBAction func clickToMonthBtn(_ sender: UIButton) {
     }
+    
     
     
     //각 칸의 리스트를 그리기 위한 펑션
@@ -97,6 +88,53 @@ class CalendarViewController: UIViewController {
     
     // 컬렉션뷰 생성
     
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        2
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        if section == 0{
+            return 7
+        }else{
+            return dayList.count
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calendarCell", for: indexPath) as!
+            CalendarCollectionViewCell
+        if indexPath.first == 0{
+            switch indexPath.row{
+            case 0:
+                cell.dayLabel.text = "일"
+                cell.dayLabel.textColor = .red
+            case 1:
+                cell.dayLabel.text = "월"
+            case 2:
+                cell.dayLabel.text = "화"
+            case 3:
+                cell.dayLabel.text = "수"
+            case 4:
+                cell.dayLabel.text = "목"
+            case 5:
+                cell.dayLabel.text = "금"
+            case 6:
+                cell.dayLabel.text = "토"
+                cell.dayLabel.textColor = .blue
+            default:
+                break
+            }
+        }else if indexPath.first == 1{
+            
+        }
+        return cell
+    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let width: CGFloat = (collectionView.bounds.width) / 7
+        let height: CGFloat = width
+        return CGSize(width: width, height: height)
+    }
 
 }
 
