@@ -14,12 +14,12 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var clickToForwardBtn: UIButton!
     @IBOutlet weak var clickToYearBtn: UIButton!
     var  dataModel = CalendarModel()
-    var dayList = [0,0,0,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,0,0,0]
+    let days = ["일","월","화","수","목","금","토"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        clickToYearBtn.setTitle(dataModel.setYearMonth(value: Date()), for: .normal)
+        clickToYearBtn.setTitle(dataModel.setYearMonth(value: testDate(date: "202109")), for: .normal)
     }
     
     /*
@@ -32,7 +32,11 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     */
 
-
+    func testDate(date : String) -> Date{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMM"
+        return formatter.date(from: date)!
+    }
 
     func  setYearView(value:String) {
         // Year에 대한 text set
@@ -59,9 +63,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     
-    // 월 선택시 클릭 이벤트
-    @IBAction func clickToMonthBtn(_ sender: UIButton) {
-    }
+//    // 월 선택시 클릭 이벤트
+//    @IBAction func clickToMonthBtn(_ sender: UIButton) {
+//    }
     
     
     
@@ -96,7 +100,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if section == 0{
             return 7
         }else{
-            return dayList.count
+            return dataModel.dayTypeList.count
         }
     }
     
@@ -104,28 +108,44 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calendarCell", for: indexPath) as!
             CalendarCollectionViewCell
         if indexPath.first == 0{
-            switch indexPath.row{
-            case 0:
-                cell.dayLabel.text = "일"
+            switch days[indexPath.row]{
+            case "일":
+                cell.dayLabel.text = days[indexPath.row]
                 cell.dayLabel.textColor = .red
-            case 1:
-                cell.dayLabel.text = "월"
-            case 2:
-                cell.dayLabel.text = "화"
-            case 3:
-                cell.dayLabel.text = "수"
-            case 4:
-                cell.dayLabel.text = "목"
-            case 5:
-                cell.dayLabel.text = "금"
-            case 6:
-                cell.dayLabel.text = "토"
+            case "월":
+                cell.dayLabel.text = days[indexPath.row]
+            case "화":
+                cell.dayLabel.text = days[indexPath.row]
+            case "수":
+                cell.dayLabel.text = days[indexPath.row]
+            case "목":
+                cell.dayLabel.text = days[indexPath.row]
+            case "금":
+                cell.dayLabel.text = days[indexPath.row]
+            case "토":
+                cell.dayLabel.text = days[indexPath.row]
                 cell.dayLabel.textColor = .blue
             default:
                 break
             }
         }else if indexPath.first == 1{
-            
+            switch dataModel.dayTypeList[indexPath.row]{
+            case .blank:
+                cell.dayLabel.text = ""
+            case .normal:
+                cell.dayLabel.text = "\(dataModel.days[indexPath.row])"
+            case .saturday:
+                cell.dayLabel.text = "\(dataModel.days[indexPath.row])"
+                cell.dayLabel.textColor = .blue
+            case .sunday:
+                cell.dayLabel.text = "\(dataModel.days[indexPath.row])"
+                cell.dayLabel.textColor = .red
+            case .today:
+                cell.dayLabel.text = "\(dataModel.days[indexPath.row])"
+                cell.dayLabel.textColor = .white
+                cell.layer.cornerRadius = ((collectionView.bounds.width) / 7) / 2
+                cell.backgroundColor = .black
+            }
         }
         return cell
     }
