@@ -14,12 +14,18 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBOutlet weak var clickToForwardBtn: UIButton!
     @IBOutlet weak var clickToYearBtn: UIButton!
     var  dataModel = CalendarModel()
-    var dayList = [0,0,0,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,1,2,3,4,5,6,7,0,0,0]
+    let days = ["일","월","화","수","목","금","토"]
+    let weekNameViewType = 0
+    let dayViewType = 1
+    var dateCount = 0
+    var startDay = weekDay.sunday
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        clickToYearBtn.setTitle(dataModel.setYearMonth(value: Date()), for: .normal)
+        setYearMonthView(value: dataModel.setYearMonth(value: testDate()))
+        startDay = dataModel.getStartDay(date: testDate())
+        dateCount = dataModel.getDateCount(month: testDate())
     }
     
     /*
@@ -32,15 +38,20 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
     */
 
+    func testDate() -> Date{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMM"
+        return formatter.date(from: "202108")!
+    }
 
-
-    func  setYearView(value:String) {
+    func  setYearMonthView(value:String) {
         // Year에 대한 text set
+        clickToYearBtn.setTitle(value, for: .normal)
     }
     
-    func  setMonthView(value:String){
-        //month에 대한 text  set
-    }
+//    func  setMonthView(value:String){
+//        //month에 대한 text  set
+//    }
     
     
     // 이전달 버튼 클릭
@@ -59,9 +70,9 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     }
 
     
-    // 월 선택시 클릭 이벤트
-    @IBAction func clickToMonthBtn(_ sender: UIButton) {
-    }
+//    // 월 선택시 클릭 이벤트
+//    @IBAction func clickToMonthBtn(_ sender: UIButton) {
+//    }
     
     
     
@@ -96,45 +107,69 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if section == 0{
             return 7
         }else{
-            return dayList.count
+            return dataModel.getDayList(dayCount: dateCount, startDay: startDay).count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calendarCell", for: indexPath) as!
             CalendarCollectionViewCell
-        if indexPath.first == 0{
-            switch indexPath.row{
-            case 0:
-                cell.dayLabel.text = "일"
-                cell.dayLabel.textColor = .red
-            case 1:
-                cell.dayLabel.text = "월"
-            case 2:
-                cell.dayLabel.text = "화"
-            case 3:
-                cell.dayLabel.text = "수"
-            case 4:
-                cell.dayLabel.text = "목"
-            case 5:
-                cell.dayLabel.text = "금"
-            case 6:
-                cell.dayLabel.text = "토"
-                cell.dayLabel.textColor = .blue
-            default:
-                break
-            }
-        }else if indexPath.first == 1{
-            
+        if indexPath.first == weekNameViewType{
+            setWeekDay(row: indexPath.row, label: cell.dayLabel)
+        }else if indexPath.first == dayViewType{
+            setDay(row: indexPath.row, label: cell.dayLabel, cell: cell)
         }
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        let width: CGFloat = (collectionView.bounds.width) / 7
+        let width: CGFloat = (collectionView.bounds.width) / 7 // 디바이스 크기에 따라 가변적으로 컬렉션뷰 셀의 크기를 정하기 위해 CollectionView의 가로 길이를 구해서 7로 나눔
         let height: CGFloat = width
         return CGSize(width: width, height: height)
     }
 
+    // 컬렉션뷰 요일
+    func setWeekDay(row : Int, label : UILabel){
+        switch days[row]{
+        case "일":
+            label.text = days[row]
+            label.textColor = .red
+        case "월":
+            label.text = days[row]
+        case "화":
+            label.text = days[row]
+        case "수":
+            label.text = days[row]
+        case "목":
+            label.text = days[row]
+        case "금":
+            label.text = days[row]
+        case "토":
+            label.text = days[row]
+            label.textColor = .blue
+        default:
+            break
+        }
+    }
+    // 컬렉션뷰 날짜
+    func setDay(row : Int, label : UILabel, cell : UICollectionViewCell){
+        switch dataModel.dayTypeList[row]{
+        case .blank:
+            label.text = ""
+        case .normal:
+            label.text = "\(dataModel.days[row])"
+        case .saturday:
+            label.text = "\(dataModel.days[row])"
+            label.textColor = .blue
+        case .sunday:
+            label.text = "\(dataModel.days[row])"
+            label.textColor = .red
+        case .today:
+            label.text = "\(dataModel.days[row])"
+            label.textColor = .white
+            cell.layer.cornerRadius = (cell.bounds.width) / 2 // 정사각형을 원으로 만들기 위해 한변의 길이의 반을 radius 값으로 주었음
+            cell.backgroundColor = .black
+        }
+    }
 }
 
