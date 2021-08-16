@@ -7,13 +7,32 @@
 
 import Foundation
 
+enum dayType {
+    case blank
+    case today
+    case saturday
+    case sunday
+    case normal
+}
+
+enum weekDay : Int {
+    case sunday = 1
+    case monday = 2
+    case tuesday = 3
+    case wednesday = 4
+    case thursday = 5
+    case friday = 6
+    case saturday = 7
+    case blank = 0
+}
+
 protocol CalendarProtocol {
     
     func getDateCount(month : Date) -> Int
-    func getYearMonth(date : Date) -> Int
     
     //Year를 클릭했을 떄 View에 드롭박스에 뜰 값들을 반환
     func getYearList() -> Array<Int>
+    
     //Month를 클릭했을 떄 View에 드롭박스에 뜰 값들을 반환
     func getMonthList() -> Array<Int>
     
@@ -22,88 +41,148 @@ protocol CalendarProtocol {
         
     func setYearMonth(value : Date) -> String
     
-//    func setMonth(value : Int)
+    func getStartDay(date : Date) -> weekDay
     
-    func setDay(value : Int)
-    
-    
-    func isToday(day : String ) -> Bool
+    func isToday(day : Int ) -> Bool
     
     func isSaturDay(day :Int) -> Bool
     
     func isSunDay(day : Int) -> Bool
     
+    func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>
+    
+//    func getYearMonth(date : Date) -> Int
+    
+//    func setMonth(value : Int)
+    
+//    func setDay(value : Int)
 }
 
 
 class CalendarModel : CalendarProtocol{
-    enum dayType {
-        case blank
-        case today
-        case saturday
-        case sunday
-        case normal
-    }
-//    var calendarInstance : Calendar
-    var currentYear : Int = 0
-    var currentMonth : Int = 0
-    var currentDay : Int = 0
-    let dateFormat = "yyyy . MM"
+//    var currentYear : Int = 0
+//    var currentMonth : Int = 0
+//    var currentDay : Int = 0
     
     var cal = Calendar.current
     let formatter = DateFormatter()
     var components = DateComponents()
+    let dateFormat = "yyyy . MM"
+    let weekDays:[weekDay] = [.sunday,.monday,.tuesday,.wednesday,.thursday,.friday,.saturday]
+    
     var dayTypeList: [dayType] = []
     var days:[Int] = []
     var daysCountInMonth = 0 // 해당 월이 며칠까지 있는지
-    var weekdayAdding = 0 // 시작일
-    var isToday = true
+    var startDay:weekDay = .sunday // 시작일
+    var currentYearMonth = "" // 현재 년,월
+    
+    var today : Int{
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd"
+        return Int(formatter.string(from: Date()))!
+    }
     
     init() {
         initCalendarInstance()
+        formatter.dateFormat = dateFormat
     }
 
     func initCalendarInstance() {
         print("initCalendarInstance")
-        formatter.dateFormat = dateFormat
+    }
+    
+    func isToday(day : Int) -> Bool {
+        if currentYearMonth == formatter.string(from: Date()) && day == today{
+            return true
+        }else{
+            return false
+        }
     }
     
     func isSaturDay(day : Int) -> Bool {
-        return true
+        if (day + 1) % 7 == 0{
+            return true
+        }else{
+            return false
+        }
     }
     
     func isSunDay(day : Int) -> Bool {
-        return true
+        if (day + 1) % 7 == weekDay.sunday.rawValue{
+            return true
+        }else{
+            return false
+        }
     }
-    
-
     
     func setYearMonth(value: Date) -> String{
         let dateString = formatter.string(from: value)
-        isToday = isToday(day: dateString)
-        getFirstDay(date: dateString)
+        currentYearMonth = dateString // 현재 년, 월 저장
         return dateString
     }
+    
+    func getStartDay(date : Date) -> weekDay {
+        components.day = 1
+        components.year = cal.component(.year, from: date)
+        components.month = cal.component(.month, from: date)
+        let startDayOfMonth = cal.date(from: components)
+        let startWeekday = cal.component(.weekday, from: startDayOfMonth!) - 1 // [1:일,2:월,3:화,4:수,5:목,6:금,7:토]
+        startDay = weekDays[startWeekday]
+        printLog(location: "getStartDay", value: startDay)
+        return startDay
+    }
+    
+    func getDateCount(month: Date) -> Int {
+        daysCountInMonth = cal.range(of: .day, in: .month, for: month)!.count
+        return daysCountInMonth
+    }
+    
+    func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>{
+        if startDay != weekDay.sunday{
+            for _ in 1...(startDay.rawValue - 1){
+                days.append(0)
+            }
+        }
+        for i in 1...dayCount{
+            days.append(i)
+        }
+        printLog(location: "getDayList", value: days)
+        for (index, day) in days.enumerated(){
+            if day == weekDay.blank.rawValue {
+                dayTypeList.append(dayType.blank)
+            }else if isToday(day: day) {
+                dayTypeList.append(dayType.today)
+            }else if isSaturDay(day: index) {
+                dayTypeList.append(dayType.saturday)
+            }else if isSunDay(day: index) {
+                dayTypeList.append(dayType.sunday)
+            }else {
+                dayTypeList.append(dayType.normal)
+            }
+        }
+        printLog(location: "getDayList", value: dayTypeList)
+        return dayTypeList
+    }
+
+    func getYearList() -> Array<Int> {
+        return []
+    }
+    
+    func getMonthList() -> Array<Int> {
+        return []
+    }
+    
+    func printLog(location : String, value : Any){
+        print("\(location) : \(value)")
+    }
+
+//    func getYearMonth(date: Date) -> Int {
+//        return 0
+//    }
     
 //    func setMonth(value: Int) {
 //
 //    }
-    
-    func setDay(value: Int) {
-        
-    }
-    
-    func getFirstDay(date : String) -> Int {
-        let date = formatter.date(from: date)
-        components.day = 1
-        components.year = cal.component(.year, from: date!)
-        components.month = cal.component(.month, from: date!)
-        let firstDayOfMonth = cal.date(from: components)
-        let firstWeekday = cal.component(.weekday, from: firstDayOfMonth!)
-        weekdayAdding = firstWeekday
-        getDateCount(month: firstDayOfMonth!)
-        return firstWeekday
-    }
     
 //    func getLastDay(dayCount : Int, date : Date) -> Int{
 //        components.day = dayCount
@@ -115,62 +194,9 @@ class CalendarModel : CalendarProtocol{
 //        return lastWeekday
 //    }
     
-    func getToday()->Int{
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd"
-        return Int(formatter.string(from: Date()))!
-    }
     
-    func isToday(day : String) -> Bool {
-        if day == formatter.string(from: Date()){
-            return true
-        }
-        return false
-    }
-    
-    func getYearList() -> Array<Int> {
-        return []
-    }
-    
-    func getMonthList() -> Array<Int> {
-        return []
-    }
-    
-    func getDateCount(month: Date) -> Int {
-        daysCountInMonth = cal.range(of: .day, in: .month, for: month)!.count
-        getDayList(dayCount: daysCountInMonth, firstDay: weekdayAdding)
-        return daysCountInMonth
-    }
-    
-    func getDayList(dayCount : Int, firstDay : Int) -> Array<dayType>{
-        if 7 - firstDay != 6{
-            for _ in 1...firstDay-1{
-                days.append(0)
-            }
-        }
-        for i in 1...dayCount{
-            days.append(i)
-        }
-        print(days)
-        for (index, day) in days.enumerated(){
-            if day == 0{
-                dayTypeList.append(dayType.blank)
-            }else if day == getToday() && isToday == true{
-                dayTypeList.append(dayType.today)
-            }else if (index + 1) % 7 == 0{
-                dayTypeList.append(dayType.saturday)
-            }else if (index + 1) % 7 == 1{
-                dayTypeList.append(dayType.sunday)
-            }else{
-                dayTypeList.append(dayType.normal)
-            }
-        }
-        print(dayTypeList)
-        return dayTypeList
-    }
-
-    func getYearMonth(date: Date) -> Int {
-        return 0
-    }
+//    func setDay(value: Int) {
+//
+//    }
     
 }
