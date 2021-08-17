@@ -9,7 +9,6 @@ import UIKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var clickToBackwardBtn: UIButton!
     @IBOutlet weak var clickToForwardBtn: UIButton!
@@ -36,8 +35,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
-
+     */
+    
     func testDate() -> Date{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMM"
@@ -66,7 +65,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
  
     // 년도 선택시 클릭 이벤트
     @IBAction func clickToYearBtn(_ sender: UIButton) {
-        
+        makeDatePicker()
     }
     
     func getCalendarData(date : Date){
@@ -96,6 +95,28 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         
     }
     
+    func makeDatePicker(){
+        let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let datePicker = UIDatePicker()
+        print(currentDate)
+        datePicker.date = currentDate
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.datePickerMode = .date
+        datePicker.locale = NSLocale(localeIdentifier: "ko_KO") as Locale
+        dateChooserAlert.view.addSubview(datePicker)
+        dateChooserAlert.view.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        // constraint
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.centerXAnchor.constraint(equalTo: dateChooserAlert.view.centerXAnchor).isActive = true
+        datePicker.centerYAnchor.constraint(equalTo: dateChooserAlert.view.centerYAnchor).isActive = true
+        dateChooserAlert.addAction(UIAlertAction(title: "선택완료", style: .default, handler: { [weak self] (action) in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyyMM"
+            self?.getCalendarData(date: datePicker.date)
+            self?.currentDate = datePicker.date
+        }))
+        self.present(dateChooserAlert, animated: true, completion: nil)
+    }
     
     // 컬렉션뷰 생성
     
