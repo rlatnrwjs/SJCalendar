@@ -20,6 +20,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     var dateCount = 0
     var startDay = weekDay.sunday
     var currentDate = Date()
+    let buttonTitle = "선택완료"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,8 +71,6 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func getCalendarData(date : Date){
         setYearMonthView(value: dataModel.setYearMonth(value: date))
-        startDay = dataModel.getStartDay(date: date)
-        dateCount = dataModel.getDateCount(month: date)
         collectionView.reloadData()
     }
 
@@ -109,9 +108,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.centerXAnchor.constraint(equalTo: dateChooserAlert.view.centerXAnchor).isActive = true
         datePicker.centerYAnchor.constraint(equalTo: dateChooserAlert.view.centerYAnchor).isActive = true
-        dateChooserAlert.addAction(UIAlertAction(title: "선택완료", style: .default, handler: { [weak self] (action) in
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyyMM"
+        dateChooserAlert.addAction(UIAlertAction(title: buttonTitle, style: .default, handler: { [weak self] (action) in
             self?.getCalendarData(date: datePicker.date)
             self?.currentDate = datePicker.date
         }))
@@ -128,7 +125,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if section == 0{
             return days.count
         }else{
-            return dataModel.getDayList(dayCount: dateCount, startDay: startDay).count
+            return dataModel.getDayList(dayCount: dataModel.getDateCount(month: currentDate), startDay: dataModel.getStartDay(date: currentDate)).count
         }
     }
     

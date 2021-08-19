@@ -30,12 +30,6 @@ protocol CalendarProtocol {
     
     func getDateCount(month : Date) -> Int
     
-    //Year를 클릭했을 떄 View에 드롭박스에 뜰 값들을 반환
-    func getYearList() -> Array<Int>
-    
-    //Month를 클릭했을 떄 View에 드롭박스에 뜰 값들을 반환
-    func getMonthList() -> Array<Int>
-    
     // 최초 Calendar를 컨트롤 할 기본 값들을 초기화 하는 펑션
     func initCalendarInstance()
         
@@ -51,6 +45,7 @@ protocol CalendarProtocol {
     
     func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>
     
+    func updateDate(date : Date, month : Int) -> Date
 }
 
 
@@ -167,35 +162,7 @@ class CalendarModel : CalendarProtocol{
         printLog(location: "getDayList", value: dayTypeList)
         return dayTypeList
     }
-
-    func getYearList() -> Array<Int> {
-        return []
-    }
-    
-    func getMonthList() -> Array<Int> {
-        return []
-    }
-    
     func printLog(location : String, value : Any){
         print("\(location) : \(value)")
     }
-
-//    func getYearMonth(date: Date) -> Int {
-//        return 0
-//    }
-    
-//    func getLastDay(dayCount : Int, date : Date) -> Int{
-//        components.day = dayCount
-//        components.year = cal.component(.year, from: date)
-//        components.month = cal.component(.month, from: date)
-//        let lastDayInMonth = cal.date(from: components)
-//        let lastWeekday = cal.component(.weekday, from: lastDayInMonth!)
-//        print(lastWeekday)
-//        return lastWeekday
-//    }
-    
-//    func setDay(value: Int) {
-//
-//    }
-    
 }
