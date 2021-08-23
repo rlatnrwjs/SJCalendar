@@ -102,6 +102,7 @@
                         <outlet property="clickToBackwardBtn" destination="PSc-Do-4ga" id="kyd-bN-2pM"/>
                         <outlet property="clickToForwardBtn" destination="qKl-ob-4jW" id="Up3-EK-y4d"/>
                         <outlet property="clickToYearBtn" destination="Feb-gu-w8F" id="lS3-c9-cUx"/>
+                        <outlet property="collectionView" destination="yTK-wF-xM2" id="cbP-qP-jgt"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

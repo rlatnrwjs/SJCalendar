@@ -30,12 +30,6 @@ protocol CalendarProtocol {
     
     func getDateCount(month : Date) -> Int
     
-    //Year를 클릭했을 떄 View에 드롭박스에 뜰 값들을 반환
-    func getYearList() -> Array<Int>
-    
-    //Month를 클릭했을 떄 View에 드롭박스에 뜰 값들을 반환
-    func getMonthList() -> Array<Int>
-    
     // 최초 Calendar를 컨트롤 할 기본 값들을 초기화 하는 펑션
     func initCalendarInstance()
         
@@ -49,21 +43,13 @@ protocol CalendarProtocol {
     
     func isSunDay(day : Int) -> Bool
     
-    func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>
+    func getDayList(date : Date) -> Array<dayType>
     
-//    func getYearMonth(date : Date) -> Int
-    
-//    func setMonth(value : Int)
-    
-//    func setDay(value : Int)
+    func updateDate(date : Date, month : Int) -> Date
 }
 
 
 class CalendarModel : CalendarProtocol{
-//    var currentYear : Int = 0
-//    var currentMonth : Int = 0
-//    var currentDay : Int = 0
-    
     var cal = Calendar.current
     let formatter = DateFormatter()
     var components = DateComponents()
@@ -75,6 +61,7 @@ class CalendarModel : CalendarProtocol{
     var daysCountInMonth = 0 // 해당 월이 며칠까지 있는지
     var startDay:weekDay = .sunday // 시작일
     var currentYearMonth = "" // 현재 년,월
+    var currentDate = Date()
     
     var today : Int{
         let formatter = DateFormatter()
@@ -118,7 +105,14 @@ class CalendarModel : CalendarProtocol{
     func setYearMonth(value: Date) -> String{
         let dateString = formatter.string(from: value)
         currentYearMonth = dateString // 현재 년, 월 저장
+        currentDate = value
         return dateString
+    }
+    
+    func updateDate(date : Date, month : Int) -> Date{
+        currentDate = Calendar.current.date(byAdding: .month, value: month, to: date)!
+        printLog(location: "updateDate", value: currentDate)
+        return currentDate
     }
     
     func getStartDay(date : Date) -> weekDay {
@@ -137,13 +131,15 @@ class CalendarModel : CalendarProtocol{
         return daysCountInMonth
     }
     
-    func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>{
-        if startDay != weekDay.sunday{
+    func getDayList(date : Date) -> Array<dayType>{
+        days.removeAll()
+        dayTypeList.removeAll()
+        if getStartDay(date : date) != weekDay.sunday{
             for _ in 1...(startDay.rawValue - 1){
                 days.append(0)
             }
         }
-        for i in 1...dayCount{
+        for i in 1...getDateCount(month : date){
             days.append(i)
         }
         printLog(location: "getDayList", value: days)
@@ -163,40 +159,7 @@ class CalendarModel : CalendarProtocol{
         printLog(location: "getDayList", value: dayTypeList)
         return dayTypeList
     }
-
-    func getYearList() -> Array<Int> {
-        return []
-    }
-    
-    func getMonthList() -> Array<Int> {
-        return []
-    }
-    
     func printLog(location : String, value : Any){
         print("\(location) : \(value)")
     }
-
-//    func getYearMonth(date: Date) -> Int {
-//        return 0
-//    }
-    
-//    func setMonth(value: Int) {
-//
-//    }
-    
-//    func getLastDay(dayCount : Int, date : Date) -> Int{
-//        components.day = dayCount
-//        components.year = cal.component(.year, from: date)
-//        components.month = cal.component(.month, from: date)
-//        let lastDayInMonth = cal.date(from: components)
-//        let lastWeekday = cal.component(.weekday, from: lastDayInMonth!)
-//        print(lastWeekday)
-//        return lastWeekday
-//    }
-    
-    
-//    func setDay(value: Int) {
-//
-//    }
-    
 }

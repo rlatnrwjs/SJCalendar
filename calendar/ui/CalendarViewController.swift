@@ -8,8 +8,8 @@
 import UIKit
 
 class CalendarViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-
     
+    @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var clickToBackwardBtn: UIButton!
     @IBOutlet weak var clickToForwardBtn: UIButton!
     @IBOutlet weak var clickToYearBtn: UIButton!
@@ -19,15 +19,24 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     let dayViewType = 1
     var dateCount = 0
     var startDay = weekDay.sunday
+    var currentDate = Date()
+    let buttonTitle = "선택완료"
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        setYearMonthView(value: dataModel.setYearMonth(value: testDate()))
-        startDay = dataModel.getStartDay(date: testDate())
-        dateCount = dataModel.getDateCount(month: testDate())
+        getCalendarData(date: Date())
     }
     
+    func getCalendarData(date : Date){
+        setYearMonthView(value: dataModel.setYearMonth(value: date))
+        collectionView.reloadData()
+    }
+    
+    func  setYearMonthView(value:String) {
+        // Year에 대한 text set
+        clickToYearBtn.setTitle(value, for: .normal)
+    }
     /*
     // MARK: - Navigation
 
@@ -36,66 +45,56 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
     }
-    */
-
+     */
+    
     func testDate() -> Date{
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMM"
         return formatter.date(from: "202108")!
     }
 
-    func  setYearMonthView(value:String) {
-        // Year에 대한 text set
-        clickToYearBtn.setTitle(value, for: .normal)
-    }
-    
-//    func  setMonthView(value:String){
-//        //month에 대한 text  set
-//    }
-    
+
     
     // 이전달 버튼 클릭
     //재강 : 동일한 성격의 이벤트는 네이밍을 최대한 통일
     @IBAction func clickToBackwardBtn(_ sender: UIButton) {
+        currentDate = dataModel.updateDate(date: currentDate, month: -1)
+        getCalendarData(date: currentDate)
     }
     
     
     // 다음달 버튼 클릭
     //재강 : 동일한 성격의 이벤트는 네이밍을 최대한 통일
     @IBAction func clickToForwardBtn(_ sender: UIButton) {
+        currentDate = dataModel.updateDate(date: currentDate, month: 1)
+        getCalendarData(date: currentDate)
     }
  
     // 년도 선택시 클릭 이벤트
     @IBAction func clickToYearBtn(_ sender: UIButton) {
+        makeDatePicker()
     }
 
-    
-//    // 월 선택시 클릭 이벤트
-//    @IBAction func clickToMonthBtn(_ sender: UIButton) {
-//    }
-    
-    
-    
-    //각 칸의 리스트를 그리기 위한 펑션
-    func drawEachDayView(){
-        
+    func makeDatePicker(){
+        let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        let datePicker = UIDatePicker()
+        print(currentDate)
+        datePicker.date = currentDate
+        datePicker.preferredDatePickerStyle = .wheels
+        datePicker.datePickerMode = .date
+        datePicker.locale = NSLocale(localeIdentifier: "ko_KO") as Locale
+        dateChooserAlert.view.addSubview(datePicker)
+        dateChooserAlert.view.heightAnchor.constraint(equalToConstant: 300).isActive = true
+        // constraint
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.centerXAnchor.constraint(equalTo: dateChooserAlert.view.centerXAnchor).isActive = true
+        datePicker.centerYAnchor.constraint(equalTo: dateChooserAlert.view.centerYAnchor).isActive = true
+        dateChooserAlert.addAction(UIAlertAction(title: buttonTitle, style: .default, handler: { [weak self] (action) in
+            self?.getCalendarData(date: datePicker.date)
+            self?.currentDate = datePicker.date
+        }))
+        self.present(dateChooserAlert, animated: true, completion: nil)
     }
-    
-    //해당 칸의 버튼 ? 또는 텍스트뷰? 를 전달해서 그 컬러나 상태값을 세팅
-    // Any로 뷰의 타입을 둔건, 제가 IOS의 컴포넌트를 몰라서 그러니 추후에 변경 바람
-    func setTodayViewState(view : Any, day : Int){
-        //오늘
-    }
-    
-    func setSaturDayViewState(view : Any, day : Int){
-        
-    }
-    
-    func setSundayViewState(view : Any , day : Int){
-        
-        
-    }
-    
     
     // 컬렉션뷰 생성
     
@@ -105,15 +104,18 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0{
-            return 7
+            return days.count
         }else{
-            return dataModel.getDayList(dayCount: dateCount, startDay: startDay).count
+            return dataModel.getDayList(date : currentDate).count
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "calendarCell", for: indexPath) as!
             CalendarCollectionViewCell
+        cell.dayLabel.text = ""
+        cell.dayLabel.textColor = .black
+        cell.backgroundColor = .clear
         if indexPath.first == weekNameViewType{
             setWeekDay(row: indexPath.row, label: cell.dayLabel)
         }else if indexPath.first == dayViewType{
@@ -121,8 +123,8 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         }
         return cell
     }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
         let width: CGFloat = (collectionView.bounds.width) / 7 // 디바이스 크기에 따라 가변적으로 컬렉션뷰 셀의 크기를 정하기 위해 CollectionView의 가로 길이를 구해서 7로 나눔
         let height: CGFloat = width
         return CGSize(width: width, height: height)
