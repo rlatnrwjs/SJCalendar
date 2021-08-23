@@ -28,6 +28,15 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         getCalendarData(date: Date())
     }
     
+    func getCalendarData(date : Date){
+        setYearMonthView(value: dataModel.setYearMonth(value: date))
+        collectionView.reloadData()
+    }
+    
+    func  setYearMonthView(value:String) {
+        // Year에 대한 text set
+        clickToYearBtn.setTitle(value, for: .normal)
+    }
     /*
     // MARK: - Navigation
 
@@ -44,10 +53,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         return formatter.date(from: "202108")!
     }
 
-    func  setYearMonthView(value:String) {
-        // Year에 대한 text set
-        clickToYearBtn.setTitle(value, for: .normal)
-    }
+
     
     // 이전달 버튼 클릭
     //재강 : 동일한 성격의 이벤트는 네이밍을 최대한 통일
@@ -68,32 +74,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
     @IBAction func clickToYearBtn(_ sender: UIButton) {
         makeDatePicker()
     }
-    
-    func getCalendarData(date : Date){
-        setYearMonthView(value: dataModel.setYearMonth(value: date))
-        collectionView.reloadData()
-    }
 
-    
-    //각 칸의 리스트를 그리기 위한 펑션
-    func drawEachDayView(){
-        
-    }
-    
-    //해당 칸의 버튼 ? 또는 텍스트뷰? 를 전달해서 그 컬러나 상태값을 세팅
-    // Any로 뷰의 타입을 둔건, 제가 IOS의 컴포넌트를 몰라서 그러니 추후에 변경 바람
-    func setTodayViewState(view : Any, day : Int){
-        //오늘
-    }
-    
-    func setSaturDayViewState(view : Any, day : Int){
-        
-    }
-    
-    func setSundayViewState(view : Any , day : Int){
-        
-    }
-    
     func makeDatePicker(){
         let dateChooserAlert = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
         let datePicker = UIDatePicker()
@@ -125,7 +106,7 @@ class CalendarViewController: UIViewController, UICollectionViewDelegate, UIColl
         if section == 0{
             return days.count
         }else{
-            return dataModel.getDayList(dayCount: dataModel.getDateCount(month: currentDate), startDay: dataModel.getStartDay(date: currentDate)).count
+            return dataModel.getDayList(date : currentDate).count
         }
     }
     

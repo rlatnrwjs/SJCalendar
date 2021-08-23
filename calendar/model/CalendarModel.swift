@@ -43,17 +43,13 @@ protocol CalendarProtocol {
     
     func isSunDay(day : Int) -> Bool
     
-    func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>
+    func getDayList(date : Date) -> Array<dayType>
     
     func updateDate(date : Date, month : Int) -> Date
 }
 
 
 class CalendarModel : CalendarProtocol{
-//    var currentYear : Int = 0
-//    var currentMonth : Int = 0
-//    var currentDay : Int = 0
-    
     var cal = Calendar.current
     let formatter = DateFormatter()
     var components = DateComponents()
@@ -109,6 +105,7 @@ class CalendarModel : CalendarProtocol{
     func setYearMonth(value: Date) -> String{
         let dateString = formatter.string(from: value)
         currentYearMonth = dateString // 현재 년, 월 저장
+        currentDate = value
         return dateString
     }
     
@@ -134,15 +131,15 @@ class CalendarModel : CalendarProtocol{
         return daysCountInMonth
     }
     
-    func getDayList(dayCount : Int, startDay : weekDay) -> Array<dayType>{
+    func getDayList(date : Date) -> Array<dayType>{
         days.removeAll()
         dayTypeList.removeAll()
-        if startDay != weekDay.sunday{
+        if getStartDay(date : date) != weekDay.sunday{
             for _ in 1...(startDay.rawValue - 1){
                 days.append(0)
             }
         }
-        for i in 1...dayCount{
+        for i in 1...getDateCount(month : date){
             days.append(i)
         }
         printLog(location: "getDayList", value: days)
